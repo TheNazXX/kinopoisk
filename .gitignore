@@ -1,1 +1,13 @@
-.idea
+vendor/
+node_modules/
+*.log
+*.sql
+
+
+.env
+
+.idea/
+.vscode/
+
+
+composer.lock
