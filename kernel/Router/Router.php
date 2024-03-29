@@ -1,13 +1,18 @@
 <?php
 
 
-namespace App\Router;
+namespace Kernel\Router;
 
-use App\Router\Route;
+use Kernel\Router\Route;
+use Kernel\Http\Request;
+use Kernel\View\View;
 
 class Router {
 
-  public function __construct(){
+  public function __construct(
+    private View $view,
+    private Request $request
+  ){
     $this->initRoutes();
   }
 
@@ -34,7 +39,13 @@ class Router {
 
     if(is_array($route->getAction())){
       [$controller, $method] = $route->getAction();
-      call_user_func([new $controller, $method]);
+
+      $controller = new $controller();
+
+
+      call_user_func([$controller, 'setRequest'], $this->request);
+      call_user_func([$controller, 'setView'], $this->view);
+      call_user_func([$controller, $method]);
       return;
     }
 
